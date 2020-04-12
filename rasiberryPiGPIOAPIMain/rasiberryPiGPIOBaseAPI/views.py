@@ -10,7 +10,7 @@ import json
 
 pi = RasiberryPiGPIO.RasiberryPiGPIO("3B+", "BCM")
 # Create your views here.
-def gpio_overview():
+def gpio_overview(request):
   mode = pi.getMode()
   piType = pi.getType()
   pinList = pi.pins
