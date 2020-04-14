@@ -21,4 +21,4 @@ def led(request, boardID, switch):
     LED.light()
   else:
     LED.shutdown()
-  return ResponseProcessor.processSuccessResponse({boardID:boardID, switch: switch})
+  return ResponseProcessor.processSuccessResponse({'pin':pinObj, 'switch': switch})
