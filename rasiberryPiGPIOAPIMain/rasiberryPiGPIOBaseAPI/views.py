@@ -4,11 +4,13 @@ import rasiberryPiGPIOBaseController.Pin as Pin
 
 import rasiberryPiGPIOAPIMain.ResponseProcessor as ResponseProcessor
 
+import rasiberryPiGPIOAPIMain.PiGPIO as PiGPIO
+
 from django.http import HttpResponse
 from django.shortcuts import render
 import json
 
-pi = RasiberryPiGPIO.RasiberryPiGPIO("3B+", "BCM")
+pi = PiGPIO.PI
 # Create your views here.
 def gpio_overview(request):
   mode = pi.getMode()
