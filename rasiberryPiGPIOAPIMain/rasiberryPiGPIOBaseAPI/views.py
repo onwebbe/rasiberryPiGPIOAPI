@@ -22,8 +22,12 @@ def gpio_overview(request):
     pinBoard = pin.getBOARD()
     pinName = pin.getName()
     pinMode = pin.getMode()
-    if (pinMode == 'IN' or pinMode == 'OUT'):
+    if (pinMode == 'IN'):
       pinStatus = pin.read()
+    elif (pinMode == 'OUT'):
+      pinStatus = pin.getValue()
+    else:
+      pinStatus = ''
     pinData = {}
     pinData['pinStatus'] = pinStatus
     pinData['BCM'] = pinBCM
