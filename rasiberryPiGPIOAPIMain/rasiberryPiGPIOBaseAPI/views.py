@@ -17,11 +17,13 @@ def gpio_overview(request):
 
   pinListData = []
   for pin in pinList:
-    pinStatus = pin.read()
+    pinStatus = ''
     pinBCM = pin.getBCM()
     pinBoard = pin.getBOARD()
     pinName = pin.getName()
     pinMode = pin.getMode()
+    if (pinMode == 'IN' or pinMode == 'OUT'):
+      pinStatus = pin.read()
     pinData = {}
     pinData['pinStatus'] = pinStatus
     pinData['BCM'] = pinBCM
