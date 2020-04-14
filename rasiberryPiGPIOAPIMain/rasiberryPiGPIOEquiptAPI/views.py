@@ -21,4 +21,22 @@ def led(request, boardID, switch):
     LED.light()
   else:
     LED.shutdown()
-  return ResponseProcessor.processSuccessResponse({'pin':pinObj, 'switch': switch})
+
+  pinStatus = ''
+  pinBCM = pinObj.getBCM()
+  pinBoard = pinObj.getBOARD()
+  pinName = pinObj.getName()
+  pinMode = pinObj.getMode()
+  if (pinMode == 'IN'):
+    pinStatus = pinObj.read()
+  elif (pinMode == 'OUT'):
+    pinStatus = pinObj.getValue()
+  else:
+    pinStatus = ''
+  pinData = {}
+  pinData['pinStatus'] = pinStatus
+  pinData['BCM'] = pinBCM
+  pinData['Physical'] = pinBoard
+  pinData['Name'] = pinName
+  pinData['mode'] = pinMode
+  return ResponseProcessor.processSuccessResponse({'pin':pinData, 'switch': switch})
