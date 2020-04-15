@@ -17,7 +17,7 @@ pi = PiGPIO.PI
 def led(request, boardID, switch):
   pinObj = pi.getPinByBoardId(boardID)
   LED = SimpleEquipt.LED(pinObj)
-  if (switch == 'ON'):
+  if (switch == 'ON' or switch == 'on'):
     LED.light()
   else:
     LED.shutdown()
