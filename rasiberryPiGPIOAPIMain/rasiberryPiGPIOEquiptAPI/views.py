@@ -12,9 +12,12 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import json
 
+# import rasiberryPiGPIOEquiptAPI.service.InitialDatabaseSetup as InitialDatabaseSetup
+
 pi = PiGPIO.PI
 
-def led(request, boardID, switch):
+
+def led(request, name, boardID, GNDBoardId, switch):
   pinObj = pi.getPinByBoardId(boardID)
   LED = SimpleEquipt.LED(pinObj)
   if (switch == 'ON' or switch == 'on'):

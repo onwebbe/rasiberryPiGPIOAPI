@@ -1,3 +1,85 @@
 from django.db import models
+import django.utils.timezone as timezone
 
 # Create your models here.
+class DeviceInfo(models.Model):
+  deviceName = models.CharField(max_length=32)
+  deviceType = models.CharField(max_length=32)
+  deviceInterfaceType = models.IntegerField(default=0)  #0 GPIO 1 PWM 2 I2C defined in InterfaceConstans.py
+  class Meta:
+    #db_table = 'tb_books'  # 指明数据库表名
+    verbose_name = '设备'  # 在admin站点中显示的名称
+    verbose_name_plural = verbose_name  # 显示的复数名称
+
+  def __str__(self):
+    """定义每个数据对象的显示信息"""
+    return self.deviceName
+
+class DevicePin(models.Model):
+  deviceID = models.IntegerField()
+  pinMode = models.IntegerField() # -1 None 0 IN   1 OUT
+  pinFunction = models.IntegerField() #'GND': 0, 'GPIO': 1, '3V': 2, '5V': 3, 'SDA': 4, 'SDL': 5 defined in InterfaceConstans.py
+  class Meta:
+    #db_table = 'tb_books'  # 指明数据库表名
+    verbose_name = '设备所需pin口'  # 在admin站点中显示的名称
+    verbose_name_plural = verbose_name  # 显示的复数名称
+
+  def __str__(self):
+    """定义每个数据对象的显示信息"""
+    return self.pinFunction
+
+# Create your models here.
+class PiDeviceInfo(models.Model):
+  deviceName = models.CharField(max_length=32)
+  deviceID = models.IntegerField()
+  status = models.IntegerField(default=0) #0 unbind #1 bind
+  class Meta:
+    #db_table = 'tb_books'  # 指明数据库表名
+    verbose_name = '设备'  # 在admin站点中显示的名称
+    verbose_name_plural = verbose_name  # 显示的复数名称
+
+  def __str__(self):
+    """定义每个数据对象的显示信息"""
+    return self.deviceName
+
+class PiDevicePin(models.Model):
+  deviceID = models.IntegerField()
+  pinBoardID = models.IntegerField()
+  devicePinID = models.IntegerField()
+  pinValue = models.CharField(max_length=32)
+  class Meta:
+    #db_table = 'tb_books'  # 指明数据库表名
+    verbose_name = '设备所需pin口'  # 在admin站点中显示的名称
+    verbose_name_plural = verbose_name  # 显示的复数名称
+
+  def __str__(self):
+    """定义每个数据对象的显示信息"""
+    return self.pinBoardID + self.pinValue
+
+class DeviceData(models.Model):
+  deviceID = models.IntegerField()
+  deviceDataName = models.CharField(max_length=32)
+  deviceDataValue = models.CharField(max_length=32)
+  deviceUpdatedDataTime = models.DateTimeField('device data time', default = timezone.now)
+  class Meta:
+    #db_table = 'tb_books'  # 指明数据库表名
+    verbose_name = '设备采集的数据'  # 在admin站点中显示的名称
+    verbose_name_plural = verbose_name  # 显示的复数名称
+
+  def __str__(self):
+    """定义每个数据对象的显示信息"""
+    return self.deviceID + self.deviceDataName
+
+class DeviceDataHistory(models.Model):
+  deviceID = models.IntegerField()
+  deviceDataName = models.CharField(max_length=32)
+  deviceDataValue = models.CharField(max_length=32)
+  dataDateTime = models.DateTimeField('device data time', default = timezone.now)
+  class Meta:
+    #db_table = 'tb_books'  # 指明数据库表名
+    verbose_name = '设备数据的历史记录'  # 在admin站点中显示的名称
+    verbose_name_plural = verbose_name  # 显示的复数名称
+
+  def __str__(self):
+    """定义每个数据对象的显示信息"""
+    return self.deviceID + self.deviceDataName
