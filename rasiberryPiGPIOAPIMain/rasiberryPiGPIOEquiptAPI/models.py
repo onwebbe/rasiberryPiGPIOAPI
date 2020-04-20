@@ -14,6 +14,14 @@ class DeviceInfo(models.Model):
   def __str__(self):
     """定义每个数据对象的显示信息"""
     return self.deviceName
+  
+  def _convertToDict(self):
+    obj = {}
+    obj['id'] = self.id
+    obj['deviceName'] = self.deviceName
+    obj['deviceType'] = self.deviceType
+    obj['deviceInterfaceType'] = self.deviceInterfaceType
+    return obj
 
 class DevicePin(models.Model):
   deviceID = models.IntegerField()
@@ -27,10 +35,18 @@ class DevicePin(models.Model):
   def __str__(self):
     """定义每个数据对象的显示信息"""
     return self.pinFunction
+  
+  def _convertToDict(self):
+    obj = {}
+    obj['id'] = self.id
+    obj['deviceID'] = self.deviceID
+    obj['pinMode'] = self.pinMode
+    obj['pinFunction'] = self.pinFunction
+    return obj
 
 # Create your models here.
 class PiDeviceInfo(models.Model):
-  deviceName = models.CharField(max_length=32)
+  piDeviceName = models.CharField(max_length=32)
   deviceID = models.IntegerField()
   status = models.IntegerField(default=0) #0 unbind #1 bind
   class Meta:
@@ -41,9 +57,17 @@ class PiDeviceInfo(models.Model):
   def __str__(self):
     """定义每个数据对象的显示信息"""
     return self.deviceName
+  
+  def _convertToDict(self):
+    obj = {}
+    obj['id'] = self.id
+    obj['piDeviceName'] = self.piDeviceName
+    obj['deviceID'] = self.deviceID
+    obj['status'] = self.status
+    return obj
 
 class PiDevicePin(models.Model):
-  deviceID = models.IntegerField()
+  piDeviceID = models.IntegerField()
   pinBoardID = models.IntegerField()
   devicePinID = models.IntegerField()
   pinValue = models.CharField(max_length=32)
@@ -55,6 +79,15 @@ class PiDevicePin(models.Model):
   def __str__(self):
     """定义每个数据对象的显示信息"""
     return self.pinBoardID + self.pinValue
+  
+  def _convertToDict(self):
+    obj = {}
+    obj['id'] = self.id
+    obj['piDeviceID'] = self.piDeviceID
+    obj['pinBoardID'] = self.pinBoardID
+    obj['devicePinID'] = self.devicePinID
+    obj['pinValue'] = self.pinValue
+    return obj
 
 class DeviceData(models.Model):
   deviceID = models.IntegerField()

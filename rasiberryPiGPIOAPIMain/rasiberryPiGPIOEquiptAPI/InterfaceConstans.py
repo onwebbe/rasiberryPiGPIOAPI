@@ -15,3 +15,13 @@ PIN_FUCNTION = {
   'SDA': 4,
   'SDL': 5
 }
+STATUS = {
+  'UNBIND': 0,
+  'BIND': 1
+}
+
+def getDictKeyByName(dictObject, value):
+  for (key, itemValue) in dictObject.items():
+    if (value == itemValue):
+      return key
+  return None

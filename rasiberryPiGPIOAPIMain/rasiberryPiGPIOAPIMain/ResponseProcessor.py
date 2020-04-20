@@ -7,11 +7,11 @@ def processSuccessResponse(obj = ''):
   responseObj = {}
   responseObj["success"] = True
   responseObj["data"] = obj
-  return HttpResponse(json.dumps(responseObj, cls=MyEncoder, indent=2))
+  return HttpResponse(json.dumps(responseObj, cls=MyEncoder, indent=2), content_type='text/json', charset='utf-8')
 
 
 def processFailResponse(msg):
   responseObj = {}
   responseObj["success"] = False
   responseObj["msg"] = msg
-  return HttpResponse(json.dumps(responseObj, cls=MyEncoder, indent=2))
+  return HttpResponse(json.dumps(responseObj, cls=MyEncoder, indent=2), content_type='text/json', charset='utf-8')
