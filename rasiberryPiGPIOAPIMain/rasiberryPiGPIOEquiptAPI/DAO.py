@@ -40,12 +40,23 @@ def addPiDevice(deviceId, name):
   device = PiDeviceInfo(deviceID = deviceId, piDeviceName = name)
   device.save()
   return device
-  
+
+def updatePiDevice(piDeviceId, name):
+  PiDeviceInfo.objects.filter(id = piDeviceId).update(piDeviceName = name)
+  return PiDeviceInfo.objects.get(id = piDeviceId)
+
+def deletePiDevice(piDeviceId):
+  PiDeviceInfo.objects.filter(id = piDeviceId).delete()
+  pass
+
 def getPiDeviceById(piDeviceId):
   return PiDeviceInfo.objects.get(id = piDeviceId)
 
 def getPiDevices():
   return PiDeviceInfo.objects.all()
+
+def getPiDeviceByDeviceId(deviceId):
+  return PiDeviceInfo.objects.filter(deviceID = deviceId)
 
 def addPiDevicePin(piDeviceId, pinDataList):
   pinList = []

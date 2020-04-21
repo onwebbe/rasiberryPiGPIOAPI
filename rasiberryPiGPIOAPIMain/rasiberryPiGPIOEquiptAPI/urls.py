@@ -6,6 +6,11 @@ urlpatterns = [
     path(r'getDevices', views.getDevices),
     path(r'createPiDevice/<int:deviceId>', views.createPiDevice),
     path(r'getPiDevices', views.getPiDevices),
+    path(r'getPiDeviceById/<int:piDeviceId>', views.getPiDeviceById),
+    path(r'getPiDevicesByDeviceId/<int:deviceId>', views.getPiDevicesByDeviceId),
+    path(r'updatePiDevice/<int:piDeviceId>', views.updatePiDevice),
+    path(r'deletePiDevice/<int:piDeviceId>', views.deletePiDeviceById),
+
     path(r'getPiDevicePins/<int:piDeviceId>', views.getPiDevicePin),
     path(r'attachPiDevicePinToBoard/<int:piDevicePinId>', views.attachPiDevicePinToBoard),
     path(r'unAttachPiDevicePinToBoard/<int:piDevicePinId>', views.unAttachPiDevicePinToBoard),

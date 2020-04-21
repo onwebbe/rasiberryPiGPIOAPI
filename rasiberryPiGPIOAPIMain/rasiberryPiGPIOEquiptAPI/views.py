@@ -21,6 +21,9 @@ from rasiberryPiGPIOEquiptAPI.InterfaceConstans import PIN_FUCNTION as PIN_FUCNT
 from rasiberryPiGPIOEquiptAPI.InterfaceConstans import PIN_MODE as PIN_MODE
 from rasiberryPiGPIOEquiptAPI.InterfaceConstans import getDictKeyByName as getDictKeyByName
 
+from wsgiref.util import FileWrapper
+import os
+import mimetypes
 pi = PiGPIO.PI
 
 
@@ -55,16 +58,39 @@ def createPiDevice(request, deviceId):
   else:
     return ResponseProcessor.processFailResponse("设备名字为空")
 
+def updatePiDevice(request, piDeviceId):
+  name = request.GET.get('name')
+  updatedPiDevice = dao.updatePiDevice(piDeviceId, name)
+  return ResponseProcessor.processSuccessResponse(updatedPiDevice._convertToDict())
+
+def deletePiDeviceById(request, piDeviceId):
+  dao.deletePiDevice(piDeviceId)
+  return ResponseProcessor.processSuccessResponse()
+
 def getPiDevices(request):
   deviceList = dao.getPiDevices()
   deviceObjList = []
   for device in deviceList:
     deviceObj = device._convertToDict()
     deviceObj['status_TR'] = getDictKeyByName(STATUS, deviceObj['status'])
+    piDevicePinList = _getPiDevicePin(device.id)
+    deviceObj['pinList'] = piDevicePinList
     deviceObjList.append(deviceObj)
   return ResponseProcessor.processSuccessResponse(deviceObjList)
 
-def getPiDevicePin(request, piDeviceId):
+def getPiDeviceById(request, piDeviceId):
+  piDevice = dao.getPiDeviceById(piDeviceId)
+  return ResponseProcessor.processSuccessResponse(piDevice._convertToDict())
+
+def getPiDevicesByDeviceId(request, deviceId):
+  piDeviceList = dao.getPiDeviceByDeviceId(deviceId)
+  piDeviceObjList = []
+  for piDevice in piDeviceList:
+    piDeviceObj = piDevice._convertToDict()
+    piDeviceObjList.append(piDeviceObj)
+  return ResponseProcessor.processSuccessResponse(piDeviceObjList)
+
+def _getPiDevicePin(piDeviceId):
   devicePinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
   devicePinObjList = []
   for pidevicepind in devicePinList:
@@ -72,6 +98,10 @@ def getPiDevicePin(request, piDeviceId):
     devicePin = _getPiDevicePinDetail(deviceObj['devicePinID'])
     deviceObj['devicePinDetail'] = devicePin
     devicePinObjList.append(deviceObj)
+  return devicePinObjList
+
+def getPiDevicePin(request, piDeviceId):
+  devicePinObjList = _getPiDevicePin(piDeviceId)
   return ResponseProcessor.processSuccessResponse(devicePinObjList)
 
 def _getPiDevicePinDetail(devicePinId):
@@ -113,3 +143,14 @@ def led(request, piDeviceId, switch):
     else:
       led.shutdown()
   return ResponseProcessor.processSuccessResponse()
+
+def getDeviceImage(request, deviceId):
+  image_path = request.GET.get('path')
+  print(image_path)
+  fileWrapper = FileWrapper(open(image_path, 'rb'))
+  content_type = mimetypes.guess_type(image_path)[0]
+  contentLength = os.path.getsize(image_path)
+  response = HttpResponse(fileWrapper, content_type = content_type)
+  response['Content-Length']      = contentLength
+  response['Content-Disposition'] = "attachment; filename=%s" %  image_path
+  return response
