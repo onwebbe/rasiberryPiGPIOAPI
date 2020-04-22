@@ -40,6 +40,10 @@ def getDevices(request):
     deviceObjList.append(deviceObj)
   return ResponseProcessor.processSuccessResponse(deviceObjList)
 
+def _getDeviceById(deviceId):
+  device = dao.getDeviceById(deviceId)
+  return device._convertToDict()
+
 def createPiDevice(request, deviceId):
   name = request.GET.get('name')
   if (name is not None):
@@ -75,6 +79,8 @@ def getPiDevices(request):
     deviceObj['status_TR'] = getDictKeyByName(STATUS, deviceObj['status'])
     piDevicePinList = _getPiDevicePin(device.id)
     deviceObj['pinList'] = piDevicePinList
+    device = _getDeviceById(deviceObj['deviceID'])
+    deviceObj['deviceDetail'] = device
     deviceObjList.append(deviceObj)
   return ResponseProcessor.processSuccessResponse(deviceObjList)
 

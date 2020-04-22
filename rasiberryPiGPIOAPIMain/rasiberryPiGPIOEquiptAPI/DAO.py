@@ -18,7 +18,7 @@ def getDeviceByName(name):
   return DeviceInfo.objects.filter(deviceName = name)
 
 def getDeviceById(id):
-  return DeviceInfo.objects.filter(id = id)
+  return DeviceInfo.objects.get(id = id)
 
 def addDevicePin(deviceId, pinList): # {'pinMode': '', 'pinFunction': ''}
   pinResultList = []
