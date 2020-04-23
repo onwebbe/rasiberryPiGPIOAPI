@@ -6,8 +6,8 @@ from rasiberryPiGPIOEquiptAPI.models import DeviceData
 from rasiberryPiGPIOEquiptAPI.models import DeviceDataHistory
 
 
-def addDevice(deviceName, deviceType, deviceInterfaceType):
-  device = DeviceInfo(deviceName = deviceName, deviceType = deviceType, deviceInterfaceType = deviceInterfaceType)
+def addDevice(deviceName, deviceType, deviceInCategory, deviceInterfaceType, i2cAddress = None):
+  device = DeviceInfo(deviceName = deviceName, deviceType = deviceType, deviceInCategory = deviceInCategory, deviceInterfaceType = deviceInterfaceType, i2cAddress = i2cAddress)
   device.save()
   return device
 
@@ -16,6 +16,9 @@ def getDevices():
 
 def getDeviceByName(name):
   return DeviceInfo.objects.filter(deviceName = name)
+
+def getDeviceByType(type):
+  return DeviceInfo.objects.filter(deviceType = type)
 
 def getDeviceById(id):
   return DeviceInfo.objects.get(id = id)

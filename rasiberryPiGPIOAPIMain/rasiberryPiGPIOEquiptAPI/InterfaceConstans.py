@@ -5,7 +5,8 @@ INTERFACE = {
 }
 PIN_MODE = {
   "IN": 0,
-  "OUT": 1
+  "OUT": 1,
+  "I2C": 2
 }
 PIN_FUCNTION = {
   'GND': 0,

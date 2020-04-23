@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from . import DevicesView
 urlpatterns = [
     path(r'init', views.init),
     path(r'getDevices', views.getDevices),
@@ -15,5 +16,7 @@ urlpatterns = [
     path(r'attachPiDevicePinToBoard/<int:piDevicePinId>', views.attachPiDevicePinToBoard),
     path(r'unAttachPiDevicePinToBoard/<int:piDevicePinId>', views.unAttachPiDevicePinToBoard),
     path(r'led/<int:piDeviceId>/<str:switch>', views.led),
+    path(r'DHT22/<int:piDeviceId>', DevicesView.DHT22),
+    path(r'BMP180', DevicesView.BMP180),
     path(r'start', views.start),
 ]
