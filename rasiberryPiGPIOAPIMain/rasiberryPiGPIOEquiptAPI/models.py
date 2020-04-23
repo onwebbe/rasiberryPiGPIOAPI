@@ -5,8 +5,8 @@ import django.utils.timezone as timezone
 class DeviceInfo(models.Model):
   deviceName = models.CharField(max_length=32)
   deviceType = models.CharField(max_length=32)
-  deviceInCategory = models.CharField(max_length=64)
-  i2cAddress = models.IntegerField()
+  deviceInCategory = models.CharField(max_length=64, default='')
+  i2cAddress = models.IntegerField(default=None)
   deviceInterfaceType = models.IntegerField(default=0)  #0 GPIO 1 PWM 2 I2C defined in InterfaceConstans.py
   class Meta:
     #db_table = 'tb_books'  # 指明数据库表名
