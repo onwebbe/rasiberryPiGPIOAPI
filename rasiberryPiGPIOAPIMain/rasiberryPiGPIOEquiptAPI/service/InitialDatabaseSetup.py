@@ -43,7 +43,7 @@ def createDHT22DeviceInfo():
   dao.addDevicePin(deviceId, pinList)
 
 def createBMP180DeviceInfo():
-  bmp180Device = dao.addDevice(deviceName = '气压传感器BMP180', deviceType = 'BMP180', deviceInCategory = '气压传感器', deviceInterfaceType = INTERFACE['I2C'], i2cAddress="0x77")
+  bmp180Device = dao.addDevice(deviceName = '气压传感器BMP180', deviceType = 'BMP180', deviceInCategory = '气压传感器', deviceInterfaceType = INTERFACE['I2C'], i2cAddress=0x77)
   deviceId = bmp180Device.id
   
   pinList = []
