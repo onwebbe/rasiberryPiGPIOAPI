@@ -69,6 +69,35 @@ def createBMP180DeviceInfo():
   pinList.append(SDLPin)
   dao.addDevicePin(deviceId, pinList)
 
+
+def createBY30DeviceInfo():
+  gy30Device = dao.addDevice(deviceName = '光线强度传感器GY30', deviceType = 'GY30', deviceInCategory = '光线强度传感器', deviceInterfaceType = INTERFACE['I2C'], i2cAddress=0x77)
+  deviceId = gy30Device.id
+  
+  pinList = []
+  GNDPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['GND']
+  }
+  VCCPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['3V']
+  }
+  SDAPin = {
+    'pinMode': PIN_MODE['I2C'], 
+    'pinFunction': PIN_FUCNTION['SDA']
+  }
+  SDLPin = {
+    'pinMode': PIN_MODE['I2C'], 
+    'pinFunction': PIN_FUCNTION['SDL']
+  }
+  pinList.append(GNDPin)
+  pinList.append(VCCPin)
+  pinList.append(SDAPin)
+  pinList.append(SDLPin)
+  dao.addDevicePin(deviceId, pinList)
+
+
 def run():
   print('init database')
   if (len(dao.getDeviceByType('LED')) == 0):
@@ -77,3 +106,5 @@ def run():
     createDHT22DeviceInfo()
   if (len(dao.getDeviceByType('BMP180')) == 0):
     createBMP180DeviceInfo()
+  if (len(dao.getDeviceByType('GY30')) == 0):
+    createBY30DeviceInfo()
