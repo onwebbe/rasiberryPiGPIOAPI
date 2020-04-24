@@ -22,7 +22,7 @@ from rasiberryPiGPIOEquiptAPI.InterfaceConstans import PIN_MODE as PIN_MODE
 from rasiberryPiGPIOEquiptAPI.InterfaceConstans import getDictKeyByName as getDictKeyByName
 from rasiberryPiGPIOBaseController.equiptments.Temperature import DHT22 as DHT22
 from rasiberryPiGPIOBaseController.equiptments.Pressure import BMP180 as BMP180
-
+from rasiberryPiGPIOBaseController.equiptments.LightSensor import GY30 as GY30
 from wsgiref.util import FileWrapper
 import os
 import mimetypes
@@ -73,4 +73,26 @@ def getBMP180Data(request, piDeviceId):
     bmpDataObj['temperature'] = temperature
     bmpDataObj['pressure'] = round( pressure, 0 ) / 100
     bmpDataObj['altitude'] = round( altitude, 0 )
+  return ResponseProcessor.processSuccessResponse(bmpDataObj)
+
+def getGY30Data(request, piDeviceId):
+  pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
+  SDAPin = None
+  SCLPin = None
+  for pin in pinList:
+    piDevicePinObj = pin._convertToDict()
+    devicePinObj = _getPiDevicePinDetail(piDevicePinObj['devicePinID'])
+    if (devicePinObj['pinFunction'] == PIN_FUCNTION['SDA']):
+      SDAPin = pin.pinBoardID
+    elif (devicePinObj['pinFunction'] == PIN_FUCNTION['SDL']):
+      SCLPin = pin.pinBoardID
+  bmpDataObj = {
+    'temperature': None,
+    'pressure': None, 
+    'altitude': None
+  }
+  if (SDAPin is not None and SCLPin is not None):
+    gy30 = GY30()
+    lightData = gy30.getLightData()
+    bmpDataObj['lx'] = round(lightData, 2)
   return ResponseProcessor.processSuccessResponse(bmpDataObj)
