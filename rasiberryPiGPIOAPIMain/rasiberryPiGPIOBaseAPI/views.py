@@ -85,3 +85,6 @@ def gpio_pwn_stop(request, boardID):
   if (pin is not None):
     pin.PWM_stop()
   return ResponseProcessor.processSuccessResponse()
+
+def start_scheduler():
+  pass
