@@ -71,6 +71,6 @@ def getBMP180Data(request, piDeviceId):
     altitude = bmp180.getAltitude()
     temperature = bmp180.getTemperature()
     bmpDataObj['temperature'] = temperature
-    bmpDataObj['pressure'] = pressure
-    bmpDataObj['altitude'] = altitude
+    bmpDataObj['pressure'] = round( pressure, 4 )
+    bmpDataObj['altitude'] = round( altitude, 4 )
   return ResponseProcessor.processSuccessResponse(bmpDataObj)
