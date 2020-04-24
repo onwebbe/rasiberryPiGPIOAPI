@@ -68,7 +68,7 @@ def getBMP180Data(request, piDeviceId):
   if (SDAPin is not None and SDLPin is not None):
     bmp180 = BMP180()
     pressure = bmp180.getPressure()
-    altitude = bmp180.getAltitude()
+    altitude = bmp180.getAltitude() + 115
     temperature = bmp180.getTemperature()
     bmpDataObj['temperature'] = temperature
     bmpDataObj['pressure'] = round( pressure, 4 )
