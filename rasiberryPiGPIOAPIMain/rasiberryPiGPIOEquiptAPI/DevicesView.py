@@ -87,9 +87,7 @@ def getGY30Data(request, piDeviceId):
     elif (devicePinObj['pinFunction'] == PIN_FUCNTION['SDL']):
       SCLPin = pin.pinBoardID
   bmpDataObj = {
-    'temperature': None,
-    'pressure': None, 
-    'altitude': None
+    'lx': None
   }
   if (SDAPin is not None and SCLPin is not None):
     gy30 = GY30()
