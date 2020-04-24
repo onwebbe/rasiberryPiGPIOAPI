@@ -9,4 +9,5 @@ urlpatterns = [
     path(r'PWNChangeDutyCycle/<int:boardID>/<int:cycle>', views.gpio_pwn_change_duty_cycle),
     path(r'PWNChangeDutyCycle/<int:boardID>/<int:frequency>', views.gpio_pwn_change_frequency),
     path(r'PWNStop/<int:boardID>', views.gpio_pwn_stop),
+    path(r'SaveDeviceData/<piDeviceId>', views.saveJob)
 ]

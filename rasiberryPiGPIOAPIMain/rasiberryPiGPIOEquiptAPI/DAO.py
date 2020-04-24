@@ -107,3 +107,14 @@ def checkPinIsAvailable(pinBoardID):
   else:
     return True
 
+def getDeviceDataByPiDeviceIdAndDeviceDataName(piDeviceId, deviceDataName):
+  return DeviceData.objects.filter(piDeviceID = piDeviceId, deviceDataName = deviceDataName)
+
+def saveDeviceData(piDeviceId, deviceDataName, deviceDataValue):
+  if (len(getDeviceDataByPiDeviceIdAndDeviceDataName(piDeviceId, deviceDataName)) > 0):
+    DeviceData.objects.filter(piDeviceID = piDeviceId, deviceDataName = deviceDataName).update(deviceDataValue = deviceDataValue)
+  else:
+    data = DeviceData(piDeviceID = piDeviceId, deviceDataName = deviceDataName, deviceDataValue = deviceDataValue)
+    data.save()
+  DeviceDataHistory(piDeviceID = piDeviceId, deviceDataName = deviceDataName, deviceDataValue = deviceDataValue).save()
+  return getDeviceDataByPiDeviceIdAndDeviceDataName(piDeviceId, deviceDataName)[0]

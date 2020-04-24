@@ -6,10 +6,18 @@ import rasiberryPiGPIOAPIMain.ResponseProcessor as ResponseProcessor
 
 import rasiberryPiGPIOAPIMain.PiGPIO as PiGPIO
 
+from . import Constants
 from django.http import HttpResponse
 from django.shortcuts import render
 import json
+import schedule
 
+from . import DAO as dao
+
+import rasiberryPiGPIOEquiptAPI.DAO as eqDao
+
+
+import rasiberryPiGPIOEquiptAPI.DevicesView as DevicesView
 pi = PiGPIO.PI
 # Create your views here.
 def gpio_overview(request):
@@ -86,5 +94,73 @@ def gpio_pwn_stop(request, boardID):
     pin.PWM_stop()
   return ResponseProcessor.processSuccessResponse()
 
-def start_scheduler():
-  pass
+def create_scheduler(request):
+  scheduleName = request.GET.get('scheduleName')
+  scheduleMode = Constants.SCHEDULE_MODE[request.GET.get('scheduleMode')]
+  scheduleValue = int(request.GET.get('scheduleValue'))
+  scheduleJobName = request.GET.get('scheduleJobName')
+  createdScheduler = dao.createScheduler(scheduleName, scheduleMode, scheduleValue, scheduleJobName)
+  return ResponseProcessor.processSuccessResponse(createdScheduler._convertToDict())
+
+def start_scheduler(request, schedulerId):
+  scheduler = dao.startAScheduler(schedulerId)
+  return ResponseProcessor.processSuccessResponse(scheduler._convertToDict())
+
+def stop_scheduler(request, schedulerId):
+  scheduler = dao.stopAScheduler(schedulerId)
+  return ResponseProcessor.processSuccessResponse(scheduler._convertToDict())
+
+def start_process_scheduler(request):
+  activeScheduleList = dao.findAllActiveScheduler()
+  scheduledJobs = []
+  for scheduler in activeScheduleList:
+    schedulerObj = scheduler._convertToDict()
+    schedulerId = schedulerObj['id']
+    jobName = schedulerObj['scheduleJobName']
+    piDeviceId = schedulerObj['piDeviceID']
+    scheduleMode = schedulerObj['scheduleMode']
+    scheduleValue = schedulerObj['scheduleValue']
+    if (scheduleMode == Constants.SCHEDULE_MODE['SECONDS']):
+      schedule.every(scheduleValue).seconds.do(saveJob, request, piDeviceId)
+    elif (scheduleMode == Constants.SCHEDULE_MODE['MINUTS']):
+      schedule.every(scheduleValue).minutes.do(saveJob, request, piDeviceId)
+    elif (scheduleMode == Constants.SCHEDULE_MODE['HOUR']):
+      schedule.every(scheduleValue).hour.do(saveJob, request, piDeviceId)
+    elif (scheduleMode == Constants.SCHEDULE_MODE['DAY']):
+      schedule.every(scheduleValue).day.do(saveJob, request, piDeviceId)
+    scheduledJobs.append(dao.startAScheduler(schedulerId)._convertToDict())
+  return ResponseProcessor.processSuccessResponse(scheduledJobs)
+
+def saveJob(request, piDeviceId):
+  data = _saveJob(piDeviceId)
+  return ResponseProcessor.processSuccessResponse(data)
+  
+def _saveJob(piDeviceId):
+  savedDataList = []
+  piDevice = eqDao.getPiDeviceById(piDeviceId)
+  deviceId = piDevice.deviceID
+  device = eqDao.getDeviceById(deviceId)
+  jobName = device.deviceType
+  if (jobName == 'DHT22'):
+    data = DevicesView._getDHT22Data(piDeviceId)
+    # data = {
+    #   'temperature': 10,
+    #   'humidity': 40
+    # }
+    d1 = eqDao.saveDeviceData(piDeviceId, 'temperature', data['temperature'])
+    d2 = eqDao.saveDeviceData(piDeviceId, 'humidity', data['humidity'])
+    savedDataList.append(d1._convertToDict())
+    savedDataList.append(d2._convertToDict())
+  elif (jobName == 'BMP180'):
+    data = DevicesView._getBMP180Data(piDeviceId)
+    d1 = eqDao.saveDeviceData(piDeviceId, 'temperature', data['temperature'])
+    d2 = eqDao.saveDeviceData(piDeviceId, 'pressure', data['pressure'])
+    d3 = eqDao.saveDeviceData(piDeviceId, 'altitude', data['altitude'])
+    savedDataList.append(d1._convertToDict())
+    savedDataList.append(d2._convertToDict())
+    savedDataList.append(d3._convertToDict())
+  elif (jobName == 'GY30'):
+    data = DevicesView._getGY30Data(piDeviceId)
+    d1 = eqDao.saveDeviceData(piDeviceId, 'lx', data['lx'])
+    savedDataList.append(d1._convertToDict())
+  return savedDataList

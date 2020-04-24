@@ -28,7 +28,7 @@ import os
 import mimetypes
 pi = PiGPIO.PI
 
-def getDHT22Data(request, piDeviceId):
+def _getDHT22Data(piDeviceId):
   pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
   boardID = None
   for pin in pinList:
@@ -47,9 +47,13 @@ def getDHT22Data(request, piDeviceId):
     humidity = dhtData[1]
     dhtDataObj['temperature'] = temperature
     dhtDataObj['humidity'] = humidity
+  return dhtDataObj
+
+def getDHT22Data(request, piDeviceId):
+  dhtDataObj = _getDHT22Data(piDeviceId)
   return ResponseProcessor.processSuccessResponse(dhtDataObj)
 
-def getBMP180Data(request, piDeviceId):
+def _getBMP180Data(piDeviceId):
   pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
   SDAPin = None
   SDLPin = None
@@ -68,14 +72,18 @@ def getBMP180Data(request, piDeviceId):
   if (SDAPin is not None and SDLPin is not None):
     bmp180 = BMP180()
     pressure = bmp180.getPressure()
-    altitude = bmp180.getAltitude() + 115
+    altitude = bmp180.getAltitude() + 95
     temperature = bmp180.getTemperature()
     bmpDataObj['temperature'] = temperature
     bmpDataObj['pressure'] = round( pressure, 0 ) / 100
     bmpDataObj['altitude'] = round( altitude, 0 )
+  return bmpDataObj
+
+def getBMP180Data(request, piDeviceId):
+  bmpDataObj = _getBMP180Data(piDeviceId)
   return ResponseProcessor.processSuccessResponse(bmpDataObj)
 
-def getGY30Data(request, piDeviceId):
+def _getGY30Data(piDeviceId):
   pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
   SDAPin = None
   SCLPin = None
@@ -86,11 +94,15 @@ def getGY30Data(request, piDeviceId):
       SDAPin = pin.pinBoardID
     elif (devicePinObj['pinFunction'] == PIN_FUCNTION['SDL']):
       SCLPin = pin.pinBoardID
-  bmpDataObj = {
+  gy30DataObj = {
     'lx': None
   }
   if (SDAPin is not None and SCLPin is not None):
     gy30 = GY30()
     lightData = gy30.getLightData()
-    bmpDataObj['lx'] = round(lightData, 2)
-  return ResponseProcessor.processSuccessResponse(bmpDataObj)
+    gy30DataObj['lx'] = round(lightData, 2)
+  return gy30DataObj
+
+def getGY30Data(request, piDeviceId):
+  gy30DataObj = _getGY30Data(piDeviceId)
+  return ResponseProcessor.processSuccessResponse(gy30DataObj)

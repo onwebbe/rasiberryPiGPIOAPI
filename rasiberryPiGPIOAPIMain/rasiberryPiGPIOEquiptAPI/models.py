@@ -94,7 +94,7 @@ class PiDevicePin(models.Model):
     return obj
 
 class DeviceData(models.Model):
-  deviceID = models.IntegerField()
+  piDeviceID = models.IntegerField()
   deviceDataName = models.CharField(max_length=32)
   deviceDataValue = models.CharField(max_length=32)
   deviceUpdatedDataTime = models.DateTimeField('device data time', default = timezone.now)
@@ -106,9 +106,18 @@ class DeviceData(models.Model):
   def __str__(self):
     """定义每个数据对象的显示信息"""
     return self.deviceID + self.deviceDataName
+  
+  def _convertToDict(self):
+    obj = {}
+    obj['id'] = self.id
+    obj['piDeviceID'] = self.piDeviceID
+    obj['deviceDataName'] = self.deviceDataName
+    obj['deviceDataValue'] = self.deviceDataValue
+    obj['deviceUpdatedDataTime'] = self.deviceUpdatedDataTime.isoformat()
+    return obj
 
 class DeviceDataHistory(models.Model):
-  deviceID = models.IntegerField()
+  piDeviceID = models.IntegerField()
   deviceDataName = models.CharField(max_length=32)
   deviceDataValue = models.CharField(max_length=32)
   dataDateTime = models.DateTimeField('device data time', default = timezone.now)
@@ -120,3 +129,12 @@ class DeviceDataHistory(models.Model):
   def __str__(self):
     """定义每个数据对象的显示信息"""
     return self.deviceID + self.deviceDataName
+  
+  def _convertToDict(self):
+    obj = {}
+    obj['id'] = self.id
+    obj['piDeviceID'] = self.piDeviceID
+    obj['deviceDataName'] = self.deviceDataName
+    obj['deviceDataValue'] = self.deviceDataValue
+    obj['deviceUpdatedDataTime'] = self.deviceUpdatedDataTime.isoformat()
+    return obj
