@@ -25,6 +25,7 @@ from rasiberryPiGPIOBaseController.equiptments.Pressure import BMP180 as BMP180
 from rasiberryPiGPIOBaseController.equiptments.LightSensor import GY30 as GY30
 
 from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import RainDrop as RainDrop
+from rasiberryPiGPIOEquiptAPI.views import pi
 
 from wsgiref.util import FileWrapper
 import os
@@ -117,7 +118,8 @@ def _getRainDropData(piDeviceId):
     piDevicePinObj = pin._convertToDict()
     devicePinObj = _getPiDevicePinDetail(piDevicePinObj['devicePinID'])
     if (devicePinObj['pinFunction'] == PIN_FUCNTION['GPIO']):
-      boardPinObject = pin
+      boardPinID = pin.pinBoardID
+      boardPinObject = pi.getPinByBoardId(boardPinID)
   dropDataObj = {
     'rain': 'no rain'
   }
