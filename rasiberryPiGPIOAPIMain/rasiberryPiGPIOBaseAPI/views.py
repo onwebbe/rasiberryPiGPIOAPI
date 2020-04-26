@@ -163,4 +163,17 @@ def _saveJob(piDeviceId):
     data = DevicesView._getGY30Data(piDeviceId)
     d1 = eqDao.saveDeviceData(piDeviceId, 'lx', data['lx'])
     savedDataList.append(d1._convertToDict())
+  elif (jobName == 'RAINDROP'):
+    data = DevicesView._getRainDropData(piDeviceId)
+    lastDataList = eqDao.getDeviceDataByPiDeviceIdAndDeviceDataName(piDeviceId, 'rain')
+    if (len(lastDataList) == 0):
+      d1 = eqDao.saveDeviceData(piDeviceId, 'rain', data['rain'])
+      savedDataList.append(d1._convertToDict())
+    else:
+      lastData = lastDataList[len(lastDataList) - 1]
+      rainData = lastData['deviceDataValue']
+      if (rainData != data['rain']):
+        d1 = eqDao.saveDeviceData(piDeviceId, 'rain', data['rain'])
+        savedDataList.append(d1._convertToDict())
+        
   return savedDataList
