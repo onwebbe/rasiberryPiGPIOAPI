@@ -171,8 +171,8 @@ def _saveJob(piDeviceId):
       savedDataList.append(d1._convertToDict())
     else:
       lastData = lastDataList[len(lastDataList) - 1]
-      print(lastData._convertToDict())
-      rainData = lastData['deviceDataValue']
+      lastDataObj = lastData._convertToDict()
+      rainData = lastDataObj['deviceDataValue']
       if (rainData != data['rain']):
         d1 = eqDao.saveDeviceData(piDeviceId, 'rain', data['rain'])
         savedDataList.append(d1._convertToDict())
