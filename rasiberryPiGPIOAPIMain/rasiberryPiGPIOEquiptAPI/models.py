@@ -105,7 +105,7 @@ class DeviceData(models.Model):
 
   def __str__(self):
     """定义每个数据对象的显示信息"""
-    return self.deviceID + self.deviceDataName
+    return self.piDeviceID + self.deviceDataName
   
   def _convertToDict(self):
     obj = {}
