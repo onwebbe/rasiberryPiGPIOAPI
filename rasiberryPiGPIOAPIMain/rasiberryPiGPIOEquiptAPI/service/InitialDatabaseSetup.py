@@ -97,6 +97,28 @@ def createBY30DeviceInfo():
   pinList.append(SDLPin)
   dao.addDevicePin(deviceId, pinList)
 
+def createRainDropDeviceInfo():
+  rainDropDevice = dao.addDevice(deviceName = '水滴传感器', deviceType = 'RAINDROP', deviceInCategory = '水滴传感器', deviceInterfaceType = INTERFACE['I2C'], i2cAddress=0x77)
+  deviceId = rainDropDevice.id
+  
+  pinList = []
+  GNDPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['GND']
+  }
+  VCCPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['3V']
+  }
+  VPIN = {
+    'pinMode': PIN_MODE['IN'], 
+    'pinFunction': PIN_FUCNTION['GPIO']
+  }
+  
+  pinList.append(GNDPin)
+  pinList.append(VCCPin)
+  pinList.append(VPIN)
+  dao.addDevicePin(deviceId, pinList)
 
 def run():
   print('init database')
@@ -108,3 +130,5 @@ def run():
     createBMP180DeviceInfo()
   if (len(dao.getDeviceByType('GY30')) == 0):
     createBY30DeviceInfo()
+  if (len(dao.getDeviceByType('RAINDROP')) == 0):
+    createRainDropDeviceInfo()
