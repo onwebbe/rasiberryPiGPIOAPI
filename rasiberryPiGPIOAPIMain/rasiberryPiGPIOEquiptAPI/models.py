@@ -136,5 +136,5 @@ class DeviceDataHistory(models.Model):
     obj['piDeviceID'] = self.piDeviceID
     obj['deviceDataName'] = self.deviceDataName
     obj['deviceDataValue'] = self.deviceDataValue
-    obj['deviceUpdatedDataTime'] = self.deviceUpdatedDataTime.isoformat()
+    obj['dataDateTime'] = self.dataDateTime
     return obj

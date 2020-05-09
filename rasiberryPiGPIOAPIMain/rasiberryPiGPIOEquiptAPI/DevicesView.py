@@ -79,7 +79,7 @@ def _getBMP180Data(piDeviceId):
     altitude = bmp180.getAltitude() + 95
     temperature = bmp180.getTemperature()
     bmpDataObj['temperature'] = temperature
-    bmpDataObj['pressure'] = round( pressure, 0 ) / 100
+    bmpDataObj['pressure'] = round( pressure / 100, 0 ) 
     bmpDataObj['altitude'] = round( altitude, 0 )
   return bmpDataObj
 
@@ -104,7 +104,7 @@ def _getGY30Data(piDeviceId):
   if (SDAPin is not None and SCLPin is not None):
     gy30 = GY30()
     lightData = gy30.getLightData()
-    gy30DataObj['lx'] = round(lightData, 2)
+    gy30DataObj['lx'] = round(lightData, 0)
   return gy30DataObj
 
 def getGY30Data(request, piDeviceId):
