@@ -40,9 +40,10 @@ def getTodaySingleGraphData(request, piDeviceId, deviceDataName):
   dateFrom = date.today()
   dateTo = date.today()
   dateTo = dateTo.replace(day = dateTo.day + 1)
-
-  dateFrom = datetime.strptime('2020-04-27 00:00:00', '%Y-%m-%d %H:%M:%S')
-  dateTo = datetime.strptime('2020-04-28 00:00:00', '%Y-%m-%d %H:%M:%S')
+  print(dateFrom)
+  print(dateTo)
+  # dateFrom = datetime.strptime('2020-04-27 00:00:00', '%Y-%m-%d %H:%M:%S')
+  # dateTo = datetime.strptime('2020-04-28 00:00:00', '%Y-%m-%d %H:%M:%S')
   
 
   listData = _getHistoryData(piDeviceId, dateFrom, dateTo, deviceDataName)
