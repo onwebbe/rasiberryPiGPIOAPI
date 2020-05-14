@@ -3,6 +3,7 @@ import rasiberryPiGPIOEquiptHistoryAPI.HistoryDao as historyDao
 import rasiberryPiGPIOAPIMain.ResponseProcessor as ResponseProcessor
 from datetime import datetime
 from datetime import date
+import pytz
 # Create your views here.
 def _getHistoryData(piDeviceId, dateFromObj, dateToObj, deviceDataNames):
   
@@ -48,6 +49,7 @@ def getTodaySingleGraphData(request, piDeviceId, deviceDataName):
   for listitem in listData:
     data.append(listitem['deviceDataValue'])
     timeObj = listitem['dataDateTime']
+    timeObj = timeObj.astimezone(pytz.timezone('Asia/Shanghai'))
     displayTime = timeObj.strftime('%H:%M')
     category.append(displayTime)
   
