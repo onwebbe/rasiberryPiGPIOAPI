@@ -5,6 +5,8 @@ class DeviceDataHistoryChart(models.Model):
   piDeviceID = models.IntegerField()
   deviceDataName = models.CharField(max_length=32)
   title = models.CharField(max_length=36)
+  displayType = models.IntegerField(default = 0) # 0 normal, 1 display as K
+  unit = models.CharField(max_length=10, default = '')
   active = models.SmallIntegerField(default = 0)  # 0: active 1: inactive
   class Meta:
     #db_table = 'tb_books'  # 指明数据库表名
@@ -21,5 +23,7 @@ class DeviceDataHistoryChart(models.Model):
     obj['piDeviceID'] = self.piDeviceID
     obj['deviceDataName'] = self.deviceDataName
     obj['title'] = self.title
+    obj['displayType'] = self.displayType
+    obj['unit'] = self.unit
     obj['active'] = self.active
     return obj

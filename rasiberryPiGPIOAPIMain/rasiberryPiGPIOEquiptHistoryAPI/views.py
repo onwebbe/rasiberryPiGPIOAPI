@@ -4,6 +4,10 @@ import rasiberryPiGPIOAPIMain.ResponseProcessor as ResponseProcessor
 from datetime import datetime
 from datetime import date
 import pytz
+import json
+from rasiberryPiGPIOEquiptHistoryAPI.models import DeviceDataHistoryChart
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
+
 # Create your views here.
 def _getHistoryData(piDeviceId, dateFromObj, dateToObj, deviceDataNames):
   
@@ -57,3 +61,48 @@ def getTodaySingleGraphData(request, piDeviceId, deviceDataName):
   result['category'] = category
   result['data'] = data
   return ResponseProcessor.processSuccessResponse(result)
+
+@require_GET
+def getHistoryChartList(request):
+  chartList = historyDao.getAllDeviceHistoryChart()
+  chartObjList = []
+  for chart in chartList:
+    chartObjList.append(chart._convertToDict())
+  return ResponseProcessor.processSuccessResponse(chartObjList)
+
+@require_POST
+def addHistoryChart(request):
+  postBody = request.body
+  postData = json.loads(postBody)
+  piDeviceId = postData['piDeviceID']
+  deviceDataName = postData['deviceDataName']
+  title = postData['title']
+  unit = postData['unit']
+  displayType = postData['displayType']
+  resultChart = historyDao.addNewDeviceHistoryChart(piDeviceId, deviceDataName, title, unit, displayType)
+  return ResponseProcessor.processSuccessResponse(resultChart._convertToDict())
+
+@require_POST
+def updateHistoryChart(request, chartId):
+  postBody = request.body
+  postData = json.loads(postBody)
+  piDeviceId = None if ('piDeviceID' not in postData) else postData['piDeviceID']
+  deviceDataName = None if ('deviceDataName' not in postData) else postData['deviceDataName']
+  title = None if ('title' not in postData) else postData['title']
+  unit =  None if ('unit' not in postData) else postData['unit']
+  displayType = None if ('displayType' not in postData) else postData['displayType']
+  resultChart = historyDao.updateDeviceHistoryChart(chartId, piDeviceId, deviceDataName, title, unit, displayType)
+  return ResponseProcessor.processSuccessResponse(resultChart._convertToDict())
+
+@require_GET
+def deleteHistoryChart(request, chartId):
+  historyDao.deleteDeviceHistoryChart(chartId)
+  return ResponseProcessor.processSuccessResponse()
+
+@require_GET
+def getDeviceDataNamesByDeviceId(request, piDeviceId):
+  dataNames = historyDao.getDeviceDataNamesByDeviceId(piDeviceId)
+  dataNameStrs = []
+  for dataName in dataNames:
+    dataNameStrs.append(dataName['deviceDataName'])
+  return ResponseProcessor.processSuccessResponse(dataNameStrs)
