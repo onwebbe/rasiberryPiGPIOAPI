@@ -136,7 +136,7 @@ def getRainDropData(request, piDeviceId):
   dropDataObj = _getRainDropData(piDeviceId)
   return ResponseProcessor.processSuccessResponse(dropDataObj)
 
-def getRotationCountData(request, piDeviceId):
+def _getRotationCountData(piDeviceId):
   pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
   deviceData = -1
   for pin in pinList:
@@ -147,4 +147,8 @@ def getRotationCountData(request, piDeviceId):
       rotationSensor = HSensorRotation.getInstance(pi.getPinByBoardId(boardID))
       deviceData = rotationSensor.getLastCountResult()
       break
+  return deviceData
+
+def getRotationCountData(request, piDeviceId):
+  deviceData = _getRotationCountData(piDeviceId)
   return ResponseProcessor.processSuccessResponse(deviceData)

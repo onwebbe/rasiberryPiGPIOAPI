@@ -176,5 +176,8 @@ def _saveJob(piDeviceId):
       if (rainData != data['rain']):
         d1 = eqDao.saveDeviceData(piDeviceId, 'rain', data['rain'])
         savedDataList.append(d1._convertToDict())
-
+  elif (jobName == 'HSensorRotation'):
+    data = DevicesView._getGY30Data(piDeviceId)
+    d1 = eqDao.saveDeviceData(piDeviceId, 'rpm', data['rpm'])
+    savedDataList.append(d1._convertToDict())
   return savedDataList
