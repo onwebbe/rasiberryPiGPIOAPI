@@ -120,6 +120,23 @@ def createRainDropDeviceInfo():
   pinList.append(VPIN)
   dao.addDevicePin(deviceId, pinList)
 
+def createHSensorRotationDeviceInfo():
+  rotationDevice = dao.addDevice(deviceName = 'HRotation', deviceType = 'HRotation', deviceInCategory = '霍尔转速', deviceInterfaceType = INTERFACE['GPIO'])
+  deviceId = rotationDevice.id
+  
+  pinList = []
+  GNDPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['GND']
+  }
+  VPIN = {
+    'pinMode': PIN_MODE['OUT'], 
+    'pinFunction': PIN_FUCNTION['GPIO']
+  }
+  pinList.append(GNDPin)
+  pinList.append(VPIN)
+  dao.addDevicePin(deviceId, pinList)
+
 def run():
   print('init database')
   if (len(dao.getDeviceByType('LED')) == 0):
@@ -132,3 +149,5 @@ def run():
     createBY30DeviceInfo()
   if (len(dao.getDeviceByType('RAINDROP')) == 0):
     createRainDropDeviceInfo()
+  if (len(dao.getDeviceByType('HRotation')) == 0):
+    createHSensorRotationDeviceInfo()
