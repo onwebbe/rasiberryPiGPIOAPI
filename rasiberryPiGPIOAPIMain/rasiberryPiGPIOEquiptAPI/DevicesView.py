@@ -143,7 +143,7 @@ def getRotationCountData(request, piDeviceId):
     piDevicePinObj = pin._convertToDict()
     devicePinObj = _getPiDevicePinDetail(piDevicePinObj['devicePinID'])
     if (devicePinObj['pinFunction'] == PIN_FUCNTION['GPIO']):
-      rotationSensor = HSensorRotation.getInstance(devicePinObj)
+      rotationSensor = HSensorRotation.getInstance(pin)
       deviceData = rotationSensor.getLastCountResult()
       break
   return ResponseProcessor.processSuccessResponse(deviceData)
