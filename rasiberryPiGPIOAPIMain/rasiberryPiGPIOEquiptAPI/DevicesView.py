@@ -25,6 +25,8 @@ from rasiberryPiGPIOBaseController.equiptments.Pressure import BMP180 as BMP180
 from rasiberryPiGPIOBaseController.equiptments.LightSensor import GY30 as GY30
 
 from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import RainDrop as RainDrop
+from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import HSensorRotation as HSensorRotation
+
 from rasiberryPiGPIOEquiptAPI.views import pi
 
 from wsgiref.util import FileWrapper
@@ -133,3 +135,15 @@ def _getRainDropData(piDeviceId):
 def getRainDropData(request, piDeviceId):
   dropDataObj = _getRainDropData(piDeviceId)
   return ResponseProcessor.processSuccessResponse(dropDataObj)
+
+def getRotationCountData(request, piDeviceId):
+  pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
+  deviceData = -1
+  for pin in pinList:
+    piDevicePinObj = pin._convertToDict()
+    devicePinObj = _getPiDevicePinDetail(piDevicePinObj['devicePinID'])
+    if (devicePinObj['pinFunction'] == PIN_FUCNTION['GPIO']):
+      rotationSensor = HSensorRotation.getInstance(devicePinObj)
+      deviceData = rotationSensor.getLastCountResult()
+      break
+  return ResponseProcessor.processSuccessResponse(deviceData)
