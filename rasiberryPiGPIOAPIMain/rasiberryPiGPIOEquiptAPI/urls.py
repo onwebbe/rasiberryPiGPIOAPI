@@ -21,5 +21,6 @@ urlpatterns = [
     path(r'GY30/<int:piDeviceId>', DevicesView.getGY30Data),
     path(r'RainDrop/<int:piDeviceId>', DevicesView.getRainDropData),
     path(r'RotationCount/<int:piDeviceId>', DevicesView.getRotationCountData),
+    path(r'Motor/<int:piDeviceId>/<int:direction>/<int:speed>', DevicesView.moveMotor),
     path(r'start', views.start),
 ]

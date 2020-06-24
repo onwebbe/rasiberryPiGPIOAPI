@@ -27,6 +27,8 @@ from rasiberryPiGPIOBaseController.equiptments.LightSensor import GY30 as GY30
 from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import RainDrop as RainDrop
 from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import HSensorRotation as HSensorRotation
 
+from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import Motor as Motor
+
 from rasiberryPiGPIOEquiptAPI.views import pi
 
 from wsgiref.util import FileWrapper
@@ -152,3 +154,17 @@ def _getRotationCountData(piDeviceId):
 def getRotationCountData(request, piDeviceId):
   deviceData = _getRotationCountData(piDeviceId)
   return ResponseProcessor.processSuccessResponse(deviceData)
+
+def moveMotor(request, piDeviceId, direction, speed):
+  pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
+  gpioList = []
+  for pin in pinList:
+    piDevicePinObj = pin._convertToDict()
+    devicePinObj = _getPiDevicePinDetail(piDevicePinObj['devicePinID'])
+    boardID = pin.pinBoardID
+    if (devicePinObj['pinFunction'] == PIN_FUCNTION['GPIO']):
+      gpioList.append(pi.getPinByBoardId(boardID))
+
+  motor = Motor(gpioList[0], gpioList[1])
+  motor.start(direction, speed)
+  return ResponseProcessor.processSuccessResponse()

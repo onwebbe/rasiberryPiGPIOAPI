@@ -137,6 +137,33 @@ def createHSensorRotationDeviceInfo():
   pinList.append(VPIN)
   dao.addDevicePin(deviceId, pinList)
 
+def createMotorDeviceInfo():
+  motorDevice = dao.addDevice(deviceName = '直流电机驱动', deviceType = 'L298N', deviceInCategory = '直流电机驱动', deviceInterfaceType = INTERFACE['GPIO'])
+  deviceId = motorDevice.id
+  
+  pinList = []
+  GNDPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['GND']
+  }
+  VCCPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['VCC']
+  }
+  VPIN1 = {
+    'pinMode': PIN_MODE['OUT'], 
+    'pinFunction': PIN_FUCNTION['GPIO']
+  }
+  VPIN2 = {
+    'pinMode': PIN_MODE['OUT'], 
+    'pinFunction': PIN_FUCNTION['GPIO']
+  }
+  pinList.append(GNDPin)
+  pinList.append(VCCPin)
+  pinList.append(VPIN1)
+  pinList.append(VPIN2)
+  dao.addDevicePin(deviceId, pinList)
+
 def run():
   print('init database')
   if (len(dao.getDeviceByType('LED')) == 0):
@@ -151,3 +178,5 @@ def run():
     createRainDropDeviceInfo()
   if (len(dao.getDeviceByType('HRotation')) == 0):
     createHSensorRotationDeviceInfo()
+  if (len(dao.getDeviceByType('L298N')) == 0):
+    createMotorDeviceInfo()
