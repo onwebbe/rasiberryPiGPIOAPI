@@ -26,6 +26,7 @@ from rasiberryPiGPIOBaseController.equiptments.LightSensor import GY30 as GY30
 
 from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import RainDrop as RainDrop
 from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import HSensorRotation as HSensorRotation
+from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import HSensorRotationV2 as HSensorRotationV2
 
 from rasiberryPiGPIOBaseController.equiptments.SimpleEquipt import Motor as Motor
 
@@ -36,6 +37,7 @@ import os
 import mimetypes
 pi = PiGPIO.PI
 
+motors = []
 def _getDHT22Data(piDeviceId):
   pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
   boardID = None
@@ -155,7 +157,7 @@ def getRotationCountData(request, piDeviceId):
   deviceData = _getRotationCountData(piDeviceId)
   return ResponseProcessor.processSuccessResponse(deviceData)
 
-def moveMotor(request, piDeviceId, direction, speed):
+def startMotor(request, piDeviceId, direction, speed):
   pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
   gpioList = []
   for pin in pinList:
@@ -164,7 +166,26 @@ def moveMotor(request, piDeviceId, direction, speed):
     boardID = pin.pinBoardID
     if (devicePinObj['pinFunction'] == PIN_FUCNTION['GPIO']):
       gpioList.append(pi.getPinByBoardId(boardID))
-
   motor = Motor(gpioList[0], gpioList[1])
   motor.start(direction, speed)
+  motorCacheData = {}
+  motorCacheData['piDeviceId'] = piDeviceId
+  motorCacheData['motorObj'] = motor
   return ResponseProcessor.processSuccessResponse()
+
+def _getRotationCountDataV2(piDeviceId):
+  pinList = dao.getPiDevicePinByPiDeviceId(piDeviceId)
+  deviceData = -1
+  for pin in pinList:
+    piDevicePinObj = pin._convertToDict()
+    devicePinObj = _getPiDevicePinDetail(piDevicePinObj['devicePinID'])
+    boardID = pin.pinBoardID
+    if (devicePinObj['pinFunction'] == PIN_FUCNTION['GPIO']):
+      rotationSensor = HSensorRotationV2.getInstance(pi.getPinByBoardId(boardID))
+      deviceData = rotationSensor.getAvgData(5)
+      break
+  return deviceData
+
+def getRotationCountDataV2(request, piDeviceId):
+  deviceData = _getRotationCountDataV2(piDeviceId)
+  return ResponseProcessor.processSuccessResponse(deviceData)
