@@ -164,6 +164,28 @@ def createMotorDeviceInfo():
   pinList.append(VPIN2)
   dao.addDevicePin(deviceId, pinList)
 
+def createRotationDeviceInfo():
+  rotationDevice = dao.addDevice(deviceName = '霍尔传感器V2', deviceType = 'HallV2', deviceInCategory = '霍尔传感器', deviceInterfaceType = INTERFACE['GPIO'])
+  deviceId = rotationDevice.id
+  
+  pinList = []
+  GNDPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['GND']
+  }
+  VCCPin = {
+    'pinMode': None, 
+    'pinFunction': PIN_FUCNTION['5V']
+  }
+  VPIN = {
+    'pinMode': PIN_MODE['IN'], 
+    'pinFunction': PIN_FUCNTION['GPIO']
+  }
+  pinList.append(GNDPin)
+  pinList.append(VCCPin)
+  pinList.append(VPIN)
+  dao.addDevicePin(deviceId, pinList)
+
 def run():
   print('init database')
   if (len(dao.getDeviceByType('LED')) == 0):
@@ -180,3 +202,5 @@ def run():
     createHSensorRotationDeviceInfo()
   if (len(dao.getDeviceByType('L298N')) == 0):
     createMotorDeviceInfo()
+  if (len(dao.getDeviceByType('HallV2')) == 0):
+    createRotationDeviceInfo()
