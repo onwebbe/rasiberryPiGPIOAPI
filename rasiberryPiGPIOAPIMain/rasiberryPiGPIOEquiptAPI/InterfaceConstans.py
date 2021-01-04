@@ -14,7 +14,8 @@ PIN_FUCNTION = {
   '3V': 2,
   '5V': 3,
   'SDA': 4,
-  'SDL': 5
+  'SDL': 5,
+  'VCC': 6
 }
 STATUS = {
   'UNBIND': 0,
