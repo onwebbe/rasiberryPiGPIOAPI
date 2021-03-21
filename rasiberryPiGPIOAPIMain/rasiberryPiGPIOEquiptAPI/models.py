@@ -82,7 +82,7 @@ class PiDevicePin(models.Model):
 
   def __str__(self):
     """定义每个数据对象的显示信息"""
-    return self.pinBoardID + self.pinValue
+    return str(self.pinBoardID) + str(self.pinValue)
   
   def _convertToDict(self):
     obj = {}
