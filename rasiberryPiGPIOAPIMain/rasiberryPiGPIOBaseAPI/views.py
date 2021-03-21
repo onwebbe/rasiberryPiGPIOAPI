@@ -182,6 +182,6 @@ def _saveJob(piDeviceId):
     savedDataList.append(d1._convertToDict())
   elif (jobName == 'HallV2'):
     data = DevicesView._getRotationCountDataV2(piDeviceId)
-    d1 = eqDao.saveDeviceData(piDeviceId, 'rpm', data['rpm'])
+    d1 = eqDao.saveDeviceData(piDeviceId, 'rpm', data)
     savedDataList.append(d1._convertToDict())
   return savedDataList
