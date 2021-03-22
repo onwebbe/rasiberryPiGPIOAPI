@@ -128,7 +128,7 @@ class DeviceDataHistory(models.Model):
 
   def __str__(self):
     """定义每个数据对象的显示信息"""
-    return self.piDeviceID + self.deviceDataName
+    return str(self.piDeviceID) + self.deviceDataName
   
   def _convertToDict(self):
     obj = {}

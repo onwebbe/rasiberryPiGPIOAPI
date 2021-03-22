@@ -3,6 +3,7 @@ import rasiberryPiGPIOEquiptHistoryAPI.HistoryDao as historyDao
 import rasiberryPiGPIOAPIMain.ResponseProcessor as ResponseProcessor
 from datetime import datetime
 from datetime import date
+import django.utils.timezone as timezone
 import pytz
 import json
 from rasiberryPiGPIOEquiptHistoryAPI.models import DeviceDataHistoryChart
@@ -28,11 +29,11 @@ def getHistoryData(request, piDeviceId):
   dateFromObj = None
   dateToObj = None
   if (dateFrom is None):
-     dateFromObj = datetime.now()
+     dateFromObj = timezone.now()
   else:
     dateFromObj = datetime.strptime(dateFrom, '%Y-%m-%d %H:%M:%S')
   if (dateTo is None):
-     dateToObj = datetime.now()
+     dateToObj = timezone.now()
   else:
     dateToObj = datetime.strptime(dateTo, '%Y-%m-%d %H:%M:%S')
   deviceDataNames = request.GET.get('names')
